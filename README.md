@@ -56,7 +56,7 @@ Components:
     - Welcome *User's Name* & *User's role*
     - Logout button
 - Login
-    Form fields:
+    -> Form fields:
       - Email
       - Password
 - Register
