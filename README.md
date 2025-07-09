@@ -60,21 +60,21 @@ Components:
       - Email
       - Password
 - Register
-    Form fields:
+    -> Form fields:
       - Name: text
       - Email: text
       - Password: password
       - Role: Select
       - Manager: Select
 - EmployeeDashboard
-    Form fields:
+    -> Form fields:
       - Message Type: Select
       - Message: text
       - Submit Anonymously: Checkbox
       - Submit button
 - ManagerDashboard
     - EmployeeFeedback
-        Form fields:
+        -> Form fields:
           - Message: text
           - Submit button
 
