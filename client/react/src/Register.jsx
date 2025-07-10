@@ -225,6 +225,14 @@ const Register = () => {
                                     <div className="text-center">
                                         <button type="submit" className="w-100 btn btn-dark mt-4" disabled={loading}>{loading ? "Registering..." : "Register"}</button>
                                     </div>
+
+                                    <div className="text-center mt-3">
+                                        <p>Already have an account? Login</p>
+                                        <Link className="btn btn-outline-success" to="/login">
+                                            Login
+                                        </Link>
+                                    </div>
+                                    
                                 </form>
                             </div>
                         </div>
