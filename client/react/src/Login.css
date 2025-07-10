@@ -1,0 +1,7 @@
+.form-rounded {
+    border-radius: 1rem;
+}
+
+.login-button {
+    width: 50%; /* Button will take up 50% of its parent element's width */
+}
