@@ -1,0 +1,29 @@
+[{
+    "employee_id":"",
+     "manager_id":"1",
+     "name":"M1", 
+     "email":"asd@gmail.com",
+     "password": "123", 
+     "role":"manager"
+
+},
+
+{
+    "employee_id":"",
+     "manager_id":"2",
+     "name":"M2", 
+     "email":"asd@gmail.com",
+     "password": "123", 
+     "role":"manager"
+
+},
+
+{
+    "employee_id":"",
+     "manager_id":"3",
+     "name":"M3", 
+     "email":"asd@gmail.com",
+     "password": "123", 
+     "role":"manager"
+
+}]

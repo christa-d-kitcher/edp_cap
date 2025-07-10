@@ -23,8 +23,8 @@ const Register = () => {
     const [error, setError] = useState("")
     const [userRole, setUserRole] = useState("Employee")
     const [managers, setManagers] = useState([])
-    const [managersError, setManagersLoading] = useState(false)
-    const [managersLoading, setManagersError] = useState("")
+    const [managersError, setManagersError] = useState("")
+    const [managersLoading, setManagersLoading] = useState(false)
 
 
 
@@ -36,7 +36,7 @@ const Register = () => {
         try {
             setManagersLoading(true)
             setManagersError("")
-            const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/api/managers`)
+            const response = await fetch("/mockManagers.json")
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`)
@@ -53,13 +53,44 @@ const Register = () => {
                 setManagersError("Invalid data format received")
             }
         } catch (error) {
-            console.error("Error fetching managers:", error)
+            console.error("Error fetching managers:", error);
             setManagers([])
             setManagersError("Failed to load managers")
         } finally {
             setManagersLoading(false)
         }
     }
+
+    // const fetchManagers = async () => {
+    //     try {
+    //       setManagersLoading(true);
+    //       setManagersError("");
+      
+    //       const response = await fetch("/mockManagers.json");
+      
+    //       if (!response.ok) {
+    //         throw new Error(`HTTP error! status: ${response.status}`);
+    //       }
+      
+    //       const data = await response.json();
+      
+    //       // Check if data is an array before setting state
+    //       if (Array.isArray(data)) {
+    //         setManagers(data);
+    //       } else {
+    //         console.error("Managers data is not an array:", data);
+    //         setManagers([]);
+    //         setManagersError("Invalid data format received");
+    //       }
+      
+    //     } catch (error) {
+    //       console.error("Error fetching managers:", error);
+    //       setManagers([]);
+    //       setManagersError("Failed to load managers");
+    //     } finally {
+    //       setManagersLoading(false);
+    //     }
+    //   };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -71,6 +102,10 @@ const Register = () => {
 
     const handleRoleSelect = (e) => {
         setUserRole(e.target.value)
+        setRegFormData((prevData) => ({
+            ...prevData,
+            role: e.target.value,
+          }));
     }
 
     const handleRegister = async (e) => {
@@ -158,10 +193,10 @@ const Register = () => {
                                                 className="form-select"
                                                 name="role"
                                                 value={regFormData.role}
-                                                onChange={(e) => { handleChange(e); handleRoleSelect(e);}}>
+                                                onChange={(e) => { handleChange(e), handleRoleSelect(e);}}>
                                                 
-                                                <option value="option1">Employee</option>
-                                                <option value="option2">Manager</option>
+                                                <option value="Employee">Employee</option>
+                                                <option value="Manager">Manager</option>
                                             </select>
                                         </div>
 
@@ -176,7 +211,7 @@ const Register = () => {
                                                     onChange={handleChange}
                                                 >
                                                     {managers && managers.length > 0 ? managers.map((manager) => (
-                                                        <option key={manager._id} value={manager.name}>
+                                                        <option key={manager.manager_id} value={manager.name}>
                                                                 {manager.name}
                                                         </option>
                                                     )) : (<option>No Managers</option>)}
