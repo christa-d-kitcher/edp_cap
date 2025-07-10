@@ -3,68 +3,112 @@ import {
     BrowserRouter as Router,
     Route,
     Routes,
-    Link
+    Link,
+    useNavigate
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+//importing the bootstrap
+import "bootstrap/dist/css/bootstrap.min.css"; import "bootstrap/dist/js/bootstrap.js";
 
 //Beginning of function
-function Login() {
+const Login = () => {
 
-    const [userData, setUserData] = useState({});
+    //storing a useNavigate function in a variable for page navigation
+    const navigate = useNavigate();
+
+    const [userEmail, setUserEmail] = useState("");
+    const [userPassword, setUserPassword] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
 
     // useEffect(() => {});
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-            setUserData({});
+    const handleEmailChange = (e) => {
+        const { value } = e.target;
+        setUserEmail(value);
     }
-   
-    const handleLogin = async(e) => {
+
+    const handlePasswordChange = (e) => {
+        const { value } = e.target;
+        setUserPassword(value);
+    }
+
+    const handleLogin = async (e) => {
         e.preventDefault();
+
+        try {
+            const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userEmail, userPassword }),
+            }) 
+
+            const data = await response.json()
+
+            if (response.ok) {
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("user", JSON.stringify(data.user))
+                navigate('/employeedash')
+                // onLogin(data.token, data.user)
+            } else {
+                setError(data.error)
+            }
+        } catch (error) {
+            setError("Login failed. Please try again.")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
         <>
             <section>
                 <div className="container">
-                    <div className="row justify content center">
-                        <div className="col-md-6 text-center mb-5">
+                    <div className="row justify-content-center">
+                        <div className="col-md-4 col-lg-6 text-center mb-3 mt-5">
                             <h2>Login</h2>
                         </div>
                     </div>
-                    <div className="row justify content center">
-                        <div className="col-md-6 col-lg-4">
+                    <div className="row justify-content-center">
+                        <div className="col-md-4 col-lg-6">
                             <div>
-                                <h3 className="mb-4 text-center">Have an account?</h3>
+                                <h5 className="text-center text-secondary">Have an account?</h5>
                                 <form onSubmit={handleLogin}>
-                                    <div class="form-group">
-                                        <label for="emailInput">Email Address</label>
-                                        <input 
-                                            type="text" 
-                                            class="form-control" 
-                                            id="emailInput" 
-                                            name="emailInput" 
+                                    <div className="form-group mb-3">
+                                        <label htmlFor="emailInput">Email Address</label>
+                                        <input
+                                            type="text"
+                                            className="form-control form-rounded"
+                                            id="emailInput"
+                                            name="emailInput"
                                             placeholder="Email"
-                                            onChange={handleChange}
+                                            onChange={handleEmailChange}
                                         />
                                     </div>
-                                    <div class="form-group">
-                                        <label for="passwordInput">Password</label>
-                                        <input 
-                                            type="password" 
-                                            class="form-control" 
-                                            id="passwordInput" 
-                                            name="passwordInput" 
+                                    <div className="form-group">
+                                        <label htmlFor="passwordInput">Password</label>
+                                        <input
+                                            type="password"
+                                            className="form-control form-rounded"
+                                            id="passwordInput"
+                                            name="passwordInput"
                                             placeholder="Password"
-                                            onChange={handleChange}
+                                            onChange={handlePasswordChange}
                                         />
                                     </div>
-                                    <button type="submit" className="btn btn-secondary">Sign In</button>
-
+                                    {error && <p className="text-danger text-sm">{error}</p>}
+                                   
                                     <div className="text-center">
-                                        <p>Don'thave an account?</p>
+                                        <button type="submit" className="w-100 btn btn-dark mt-4 login-button" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>
+                                    </div>
 
+
+                                    <div className="text-center mt-3">
+                                        <p>Don'thave an account?</p>
+                                        <Link className="link-info" to="/register">
+                                            Register
+                                        </Link>
                                     </div>
                                 </form>
                             </div>
