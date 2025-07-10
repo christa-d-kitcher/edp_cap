@@ -61,37 +61,6 @@ const Register = () => {
         }
     }
 
-    // const fetchManagers = async () => {
-    //     try {
-    //       setManagersLoading(true);
-    //       setManagersError("");
-      
-    //       const response = await fetch("/mockManagers.json");
-      
-    //       if (!response.ok) {
-    //         throw new Error(`HTTP error! status: ${response.status}`);
-    //       }
-      
-    //       const data = await response.json();
-      
-    //       // Check if data is an array before setting state
-    //       if (Array.isArray(data)) {
-    //         setManagers(data);
-    //       } else {
-    //         console.error("Managers data is not an array:", data);
-    //         setManagers([]);
-    //         setManagersError("Invalid data format received");
-    //       }
-      
-    //     } catch (error) {
-    //       console.error("Error fetching managers:", error);
-    //       setManagers([]);
-    //       setManagersError("Failed to load managers");
-    //     } finally {
-    //       setManagersLoading(false);
-    //     }
-    //   };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setRegFormData((prevData) => ({
