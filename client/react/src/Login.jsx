@@ -1,8 +1,5 @@
 //Importing needed modules from react-router-dom
 import {
-    BrowserRouter as Router,
-    Route,
-    Routes,
     Link,
     useNavigate
 } from "react-router-dom";
@@ -22,7 +19,6 @@ const Login = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
 
-    // useEffect(() => {});
 
     const handleEmailChange = (e) => {
         const { value } = e.target;
@@ -38,7 +34,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/auth/login`, {
+            const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userEmail, userPassword }),
@@ -49,7 +45,11 @@ const Login = () => {
             if (response.ok) {
                 localStorage.setItem("token", data.token)
                 localStorage.setItem("user", JSON.stringify(data.user))
-                navigate('/employeedash')
+                console.log(data.token)
+                console.log(data.user)
+
+                const userRole = data.role;
+                {userRole === "employee" ? navigate('/employeedash') : navigate('/managerdash')}
                 // onLogin(data.token, data.user)
             } else {
                 setError(data.error)
@@ -83,6 +83,7 @@ const Login = () => {
                                             id="emailInput"
                                             name="emailInput"
                                             placeholder="Email"
+                                            value={userEmail}
                                             onChange={handleEmailChange}
                                         />
                                     </div>
@@ -94,10 +95,11 @@ const Login = () => {
                                             id="passwordInput"
                                             name="passwordInput"
                                             placeholder="Password"
+                                            value={userPassword}
                                             onChange={handlePasswordChange}
                                         />
                                     </div>
-                                    {error && <p className="text-danger text-sm">{error}</p>}
+                                    {error && <p className="text-danger text-xsm">{error}</p>}
                                    
                                     <div className="text-center">
                                         <button type="submit" className="w-100 btn btn-dark mt-4 login-button" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>
@@ -106,7 +108,7 @@ const Login = () => {
 
                                     <div className="text-center mt-3">
                                         <p>Don'thave an account?</p>
-                                        <Link className="link-info" to="/register">
+                                        <Link className="btn btn-outline-success" to="/register">
                                             Register
                                         </Link>
                                     </div>
