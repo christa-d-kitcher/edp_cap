@@ -78,6 +78,8 @@ Components:
           - Message: text
           - Submit button
 
+# To seed database
+pip install pymongo faker
 
 
 
