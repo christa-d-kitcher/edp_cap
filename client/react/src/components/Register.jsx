@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 //importing the bootstrap
 import "bootstrap/dist/css/bootstrap.min.css"; import "bootstrap/dist/js/bootstrap.js";
-
+import "./styles/register.css";
 
 const Register = () => {
 
