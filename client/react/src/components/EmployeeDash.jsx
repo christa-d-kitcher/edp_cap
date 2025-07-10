@@ -1,57 +1,62 @@
 import { useState, useEffect } from "react";
 
 const EmployeeDash = () => {
-    const [employeeData, setEmployeeData] = useState(null);
-    const [feedbackReceived, setFeedbackReceived] = useState([]);
+    const [feedbackSent, setFeedbackSent] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const token = localStorage.getItem("authToken"); // Or wherever you store it
+
     useEffect(() => {
-        fetchDashboardData();
-    }, []);
+        const fetchFeedback = async () => {
+            try {
+                const res = await fetch("/api/employees/feedback", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
 
-    const fetchDashboardData = async () => {
-        try {
-            // Replace with real endpoints when backend is ready
-            const userRes = await fetch("/api/employee/me");
-            const userData = await userRes.json();
+                const json = await res.json();
 
-            const feedbackRes = await fetch("/api/feedback/received");
-            const feedbackData = await feedbackRes.json();
+                if (json.success) {
+                    setFeedbackSent(json.data.feedback);
+                } else {
+                    throw new Error(json.error);
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                setError("Failed to load employee feedback.");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-            setEmployeeData(userData);
-            setFeedbackReceived(feedbackData);
-        } catch (err) {
-            setError("Failed to load dashboard");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+        fetchFeedback();
+    }, [token]);
 
-    if (loading) return <p>Loading dashboard...</p>;
+    if (loading) return <p>Loading feedback...</p>;
     if (error) return <p className="text-danger">{error}</p>;
 
     return (
         <div className="container mt-4">
-            <h2>Welcome, {employeeData.name}</h2>
-            <p>Email: {employeeData.email}</p>
-            <p>Manager: {employeeData.manager}</p>
-
-            <hr />
-
-            <h4>Feedback You've Received</h4>
-
-            {feedbackReceived.length === 0 ? (
-                <p>No feedback yet.</p>
+            <h3>Feedback You’ve Submitted</h3>
+            {feedbackSent.length === 0 ? (
+                <p>You haven’t submitted any feedback yet.</p>
             ) : (
                 <ul className="list-group">
-                    {feedbackReceived.map((item) => (
-                        <li key={item._id} className="list-group-item">
-                            <strong>From:</strong> {item.senderName || "Anonymous"}<br />
-                            <strong>Category:</strong> {item.category}<br />
-                            <strong>Sentiment:</strong> {item.sentimentScore}<br />
-                            <strong>Message:</strong> {item.message}
+                    {feedbackSent.map((item) => (
+                        <li key={item.id} className="list-group-item">
+                            <strong>To Manager ID:</strong> {item.manager_id}<br />
+                            <strong>Type:</strong> {item.type}<br />
+                            <strong>Message:</strong> {item.message}<br />
+                            <strong>Submitted:</strong> {new Date(item.createdAt).toLocaleString()}<br />
+                            {item.response && (
+                                <div>
+                                    <strong>Response:</strong> {item.response}<br />
+                                    <em>Responded At:</em> {new Date(item.respondedAt).toLocaleString()}
+                                </div>
+                            )}
+                            <strong>Anonymous:</strong> {item.isAnonymous ? "Yes" : "No"}
                         </li>
                     ))}
                 </ul>
@@ -60,5 +65,4 @@ const EmployeeDash = () => {
     );
 };
 
-
-export default EmployeeDash
+export default EmployeeDash;
