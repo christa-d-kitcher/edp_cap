@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 //importing the bootstrap
 import "bootstrap/dist/css/bootstrap.min.css"; import "bootstrap/dist/js/bootstrap.js";
+import "./styles/login.css";
 
 //Beginning of function
 const Login = () => {
@@ -33,32 +34,36 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/api/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userEmail, userPassword }),
-            }) 
+        const userRole = "employee";
+        {userRole === "employee" ? navigate('/employeedash') : navigate('/managerdash')}
+        
 
-            const data = await response.json()
+        // try {
+        //     const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/api/auth/login`, {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({ userEmail, userPassword }),
+        //     }) 
 
-            if (response.ok) {
-                localStorage.setItem("token", data.token)
-                localStorage.setItem("user", JSON.stringify(data.user))
-                console.log(data.token)
-                console.log(data.user)
+        //     const data = await response.json()
 
-                const userRole = data.role;
-                {userRole === "employee" ? navigate('/employeedash') : navigate('/managerdash')}
-                // onLogin(data.token, data.user)
-            } else {
-                setError(data.error)
-            }
-        } catch (error) {
-            setError("Login failed. Please try again.")
-        } finally {
-            setLoading(false)
-        }
+        //     if (response.ok) {
+        //         localStorage.setItem("token", data.token)
+        //         localStorage.setItem("user", JSON.stringify(data.user))
+        //         console.log(data.token)
+        //         console.log(data.user)
+
+        //         const userRole = data.role;
+        //         {userRole === "employee" ? navigate('/employeedash') : navigate('/managerdash')}
+        //         // onLogin(data.token, data.user)
+        //     } else {
+        //         setError(data.error)
+        //     }
+        // } catch (error) {
+        //     setError("Login failed. Please try again.")
+        // } finally {
+        //     setLoading(false)
+        // }
     }
 
     return (
@@ -102,7 +107,7 @@ const Login = () => {
                                     {error && <p className="text-danger text-xsm">{error}</p>}
                                    
                                     <div className="text-center">
-                                        <button type="submit" className="w-100 btn btn-dark mt-4 login-button" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>
+                                        <button type="submit" className="w-100 btn btn-dark mt-4" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>
                                     </div>
 
 
