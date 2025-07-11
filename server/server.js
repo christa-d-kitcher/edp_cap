@@ -34,10 +34,11 @@ const employeeSchema = new mongoose.Schema({
     manager_id: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'Employee',
-      default: null
+      default: null,
     }
   }, { timestamps: true });
   
+//Feedback Schema below  
 const feedbackSchema = new mongoose.Schema({
     employee_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -108,11 +109,14 @@ const authenticateToken = (req, res, next) => {
     }
   };
 
+
 const app = express();
+app.use(express.json());
 app.use(cors());
+  
 const PORT = 3000;
 
-app.use(express.json());
+
 
 //Register 
 app.post('/api/auth/register', async (req, res) => {
@@ -392,17 +396,22 @@ app.post('/api/feedback/:feedbackId/respond', authenticateToken, async (req, res
   });
 
   // Get all managers
-app.get('/api/managers', authenticateToken, async (req, res) => {
+app.get('/api/managers', async (req, res) => {
     try {
       const managers = await Employee.find({ role: 'Manager' }).select('-password');
+      console.log(managers);
       
       res.status(200).json({
         success: true,
         data: {
           managers: managers.map(manager => ({
-            id: manager._id,
             name: manager.name,
-            email: manager.email
+            email: manager.email,
+            password: manager.password,
+            role: manager.role,
+            manager_id: manager._id,
+            createdAt: new Date().toString(),
+            updatedAt: new Date().toString()
           }))
         },
         message: 'Managers retrieved successfully'
