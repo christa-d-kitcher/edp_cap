@@ -36,7 +36,7 @@ const Register = () => {
         try {
             setManagersLoading(true)
             setManagersError("")
-            const response = await fetch("/mockManagers.json")
+            const response = await fetch(`${import.meta.env.VITE_FEEDBACK_API_URL}/api/managers`)
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`)
@@ -81,7 +81,7 @@ const Register = () => {
         e.preventDefault();
         console.log('Form data submitted:', regFormData);
         try {
-            const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/api/auth/register`, {
+            const response = await fetch(`${import.meta.env.VITE_FEEDBACK_API_URL}/api/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(regFormData),

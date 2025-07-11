@@ -38,32 +38,32 @@ const Login = () => {
         {userRole === "employee" ? navigate('/employeedash') : navigate('/managerdash')}
         
 
-        // try {
-        //     const response = await fetch(`${import.meta.env.FEEDBACK_API_URL}/api/auth/login`, {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify({ userEmail, userPassword }),
-        //     }) 
+        try {
+            const response = await fetch(`${import.meta.env.VITE_FEEDBACK_API_URL}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userEmail, userPassword }),
+            }) 
 
-        //     const data = await response.json()
+            const data = await response.json()
 
-        //     if (response.ok) {
-        //         localStorage.setItem("token", data.token)
-        //         localStorage.setItem("user", JSON.stringify(data.user))
-        //         console.log(data.token)
-        //         console.log(data.user)
+            if (response.ok) {
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("user", JSON.stringify(data.user))
+                console.log(data.token)
+                console.log(data.user)
 
-        //         const userRole = data.role;
-        //         {userRole === "employee" ? navigate('/employeedash') : navigate('/managerdash')}
-        //         // onLogin(data.token, data.user)
-        //     } else {
-        //         setError(data.error)
-        //     }
-        // } catch (error) {
-        //     setError("Login failed. Please try again.")
-        // } finally {
-        //     setLoading(false)
-        // }
+                const userRole = data.role;
+                {userRole === "Employee" ? navigate('/employeedash') : navigate('/managerdash')}
+                // onLogin(data.token, data.user)
+            } else {
+                setError(data.error)
+            }
+        } catch (error) {
+            setError("Login failed. Please try again.")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
