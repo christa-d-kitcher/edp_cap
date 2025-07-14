@@ -320,11 +320,13 @@ app.get('/api/managers/feedback', authenticateToken, async (req, res) => {
   });
 
   // Get all feedback/questions submitted by an employee
-app.get('/api/employees/feedback', authenticateToken, async (req, res) => {
+app.get('/api/employees/feedback', async (req, res) => {
     try {
-      const feedback = await Feedback.find({ employee_id: req.employee.id })
+      const feedback = await Feedback.find({ employee_id: req.employee_id })
         .sort({ createdAt: -1 });
       
+      res.setHeader('Access-Control-Allow-Origin', '*');
+
       res.status(200).json({
         success: true,
         data: {

@@ -10,9 +10,11 @@ const EmployeeDash = () => {
     useEffect(() => {
         const fetchFeedback = async () => {
             try {
-                const res = await fetch("/api/employees/feedback", {
+                const res = await fetch(`${import.meta.env.VITE_FEEDBACK_API_URL}/api/employees/feedback`, {
+                    method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
                     },
                 });
 
